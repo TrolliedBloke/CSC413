@@ -31,7 +31,79 @@ public class Pawn extends Piece {
 
     @Override
     public List<Move> pseudoLegalMoves(Board board, Position from) {
-        throw new UnsupportedOperationException("M2: implement Pawn.pseudoLegalMoves");
+        List<Move> moves = new ArrayList<>();
+
+        int direction = color().pawnDirection();
+
+        // Try moving one square forward.
+        Position oneForward = from.offsetOrNull(0, direction);
+
+        if (oneForward != null && board.pieceAt(oneForward) == null) {
+
+            // If the pawn reaches the promotion rank, one destination
+            // produces four possible promotion moves.
+            if (oneForward.rank() == color().promotionRank()) {
+                for (PieceType choice : PROMOTION_CHOICES) {
+                    moves.add(Move.promotion(
+                            from,
+                            oneForward,
+                            this,
+                            null,
+                            choice));
+                }
+            } else {
+                moves.add(Move.quiet(from, oneForward, this));
+            }
+
+            // A pawn may move two squares only from its starting rank.
+            // This is inside the oneForward check so the pawn cannot
+            // jump over another piece.
+            if (from.rank() == color().pawnStartRank()) {
+                Position twoForward = from.offsetOrNull(0, 2 * direction);
+
+                if (twoForward != null && board.pieceAt(twoForward) == null) {
+                    moves.add(Move.quiet(from, twoForward, this));
+                }
+            }
+        }
+
+        // Pawns capture one square diagonally forward.
+        for (int fileOffset : new int[] { -1, 1 }) {
+            Position captureSquare =
+                    from.offsetOrNull(fileOffset, direction);
+
+            if (captureSquare == null) {
+                continue;
+            }
+
+            Piece captured = board.pieceAt(captureSquare);
+
+            // A pawn captures only if an enemy piece is actually
+            // standing on the diagonal square.
+            if (captured != null && captured.color() != color()) {
+
+                // A diagonal capture onto the final rank is also
+                // a promotion and therefore creates four moves.
+                if (captureSquare.rank() == color().promotionRank()) {
+                    for (PieceType choice : PROMOTION_CHOICES) {
+                        moves.add(Move.promotion(
+                                from,
+                                captureSquare,
+                                this,
+                                captured,
+                                choice));
+                    }
+                } else {
+                    moves.add(Move.capture(
+                            from,
+                            captureSquare,
+                            this,
+                            captured));
+                }
+            }
+        }
+
+        return moves;
     }
 
     /**
@@ -47,6 +119,11 @@ public class Pawn extends Piece {
      */
     @Override
     public boolean attacks(Board board, Position from, Position target) {
-        throw new UnsupportedOperationException("M2: implement Pawn.attacks");
+        int direction = color().pawnDirection();
+
+        Position leftAttack = from.offsetOrNull(-1, direction);
+        Position rightAttack = from.offsetOrNull(1, direction);
+
+        return target.equals(leftAttack) || target.equals(rightAttack);
     }
 }
