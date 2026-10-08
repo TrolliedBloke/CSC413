@@ -6,8 +6,8 @@
  */
 package edu.sfsu.csc413.chess;
 
-import edu.sfsu.csc413.chess.factory.BoardFactory;
-import edu.sfsu.csc413.chess.model.Board;
+import edu.sfsu.csc413.chess.engine.Game;
+import java.util.List;
 import edu.sfsu.csc413.chess.view.PieceGlyphs;
 import edu.sfsu.csc413.chess.view.TextBoardRenderer;
 
@@ -15,12 +15,28 @@ public final class Main {
 
     public static void main(String[] args) {
 
-        Board board = BoardFactory.standard();
+    Game game = new Game();
 
-        System.out.println(
-                new TextBoardRenderer(PieceGlyphs.LETTERS).render(board)
-        );
+    TextBoardRenderer renderer =
+            new TextBoardRenderer(PieceGlyphs.LETTERS);
+
+    // Print the starting board
+    System.out.println(renderer.render(game.board()));
+
+    // Play two moves
+    for (String notation : List.of("e2e4", "e7e5")) {
+        game.play(game.findLegalMove(notation).orElseThrow());
     }
+
+    // Print the board after both moves
+    System.out.println(renderer.render(game.board()));
+
+    // Undo the last move
+    game.undoLastMove();
+
+    // Print the board after undoing
+    System.out.println(renderer.render(game.board()));
+}
 
     private Main() {
     }

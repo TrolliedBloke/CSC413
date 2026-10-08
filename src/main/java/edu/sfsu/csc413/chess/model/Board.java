@@ -72,4 +72,38 @@ public class Board {
 
         return result.toString();
     }
+    public void apply(Move move) {
+    place(move.from(), null);
+
+    if (move.isPromotion()) {
+        Piece promotedPiece = createPromotedPiece(
+                move.promotesTo(),
+                move.moved().color()
+        );
+
+        place(move.to(), promotedPiece);
+    } else {
+        place(move.to(), move.moved());
+    }
+}
+
+public void undo(Move move) {
+    place(move.from(), move.moved());
+    place(move.to(), move.captured());
+}
+
+// We use a private switch here to avoid making the model
+// package depend on the factory package. The tradeoff is
+// duplicating the piece-construction logic.
+private Piece createPromotedPiece(PieceType type, Color color) {
+    return switch (type) {
+        case QUEEN -> new Queen(color);
+        case ROOK -> new Rook(color);
+        case BISHOP -> new Bishop(color);
+        case KNIGHT -> new Knight(color);
+        default -> throw new IllegalArgumentException(
+                "Invalid promotion type: " + type
+        );
+    };
+}
 }
