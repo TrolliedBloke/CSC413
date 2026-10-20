@@ -1,6 +1,5 @@
 package edu.sfsu.csc413.chess.engine;
 
-import edu.sfsu.csc413.chess.model.Position;
 import edu.sfsu.csc413.chess.factory.BoardFactory;
 import edu.sfsu.csc413.chess.model.Board;
 import edu.sfsu.csc413.chess.model.Color;
@@ -72,16 +71,8 @@ public class Game {
      * or its callers.
      */
     public List<Move> legalMoves() {
-        List<Move> moves = new ArrayList<>();
-
-        for (Position from : board.positionsOf(sideToMove)) {
-            moves.addAll(
-                board.pieceAt(from).pseudoLegalMoves(board, from)
-            );
-        }
-
-        return moves;
-    }
+    return MoveGenerator.legalMoves(board, sideToMove);
+    }   
 
     /**
      * Finds the legal move matching notation such as {@code "e2e4"} or
