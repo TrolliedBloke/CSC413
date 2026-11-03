@@ -39,6 +39,20 @@ public class Board {
         return positions;
     }
 
+    /**
+ * Returns the position of the king belonging to {@code color}, or
+ * {@code null} if that side has no king on the board.
+ */
+public Position kingPosition(Color color) {
+    for (Position position : positionsOf(color)) {
+        if (pieceAt(position).type() == PieceType.KING) {
+            return position;
+        }
+    }
+
+    return null;
+}
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
