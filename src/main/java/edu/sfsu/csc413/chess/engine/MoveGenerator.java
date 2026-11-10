@@ -5,7 +5,6 @@ import edu.sfsu.csc413.chess.model.Color;
 import edu.sfsu.csc413.chess.model.Move;
 import edu.sfsu.csc413.chess.model.Piece;
 import edu.sfsu.csc413.chess.model.Position;
-import edu.sfsu.csc413.chess.model.Piece;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -97,6 +96,31 @@ public final class MoveGenerator {
 /**
  * Returns true if any piece of {@code attacker} attacks {@code target}.
  */
+
+/**
+ * Returns the current game status for {@code sideToMove}.
+ *
+ * <p>This method is implemented in the next step. For now, it is only
+ * present so the project can compile while the rest of M6 is added.
+ *
+ * @param board the current board
+ * @param sideToMove the side whose turn it is
+ * @return the current game status
+ */
+public static GameStatus status(Board board, Color sideToMove) {
+    boolean inCheck = isInCheck(board, sideToMove);
+    boolean hasLegalMoves = !legalMoves(board, sideToMove).isEmpty();
+
+    if (inCheck && !hasLegalMoves) {
+        return GameStatus.CHECKMATE;
+    } else if (!inCheck && !hasLegalMoves) {
+        return GameStatus.STALEMATE;
+    } else if (inCheck) {
+        return GameStatus.CHECK;
+    } else {
+        return GameStatus.IN_PROGRESS;
+    }
+}
 public static boolean isAttacked(
         Board board,
         Position target,
@@ -112,6 +136,7 @@ public static boolean isAttacked(
 
     return false;
 }
+
 
 /**
  * Returns true if the king of {@code color} is attacked by the opposing
