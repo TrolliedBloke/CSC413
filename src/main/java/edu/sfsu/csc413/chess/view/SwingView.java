@@ -252,7 +252,7 @@ public class SwingView implements BoardView {
                     g.fillRect(x, y, squareSize, squareSize);
 
                     if (selected != null && selected.equals(position)) {
-                        g.setColor(new java.awt.Color(255, 215, 0, 170));
+                        g.setColor(new java.awt.Color(255, 140, 0, 170));
                         g.fillRect(x, y, squareSize, squareSize);
                     } else if (legalTargets.contains(position)) {
                         g.setColor(new java.awt.Color(255, 255, 100, 170));
