@@ -5,16 +5,24 @@ import edu.sfsu.csc413.chess.view.BoardView;
 import edu.sfsu.csc413.chess.view.ConsoleView;
 import edu.sfsu.csc413.chess.view.EmojiView;
 import edu.sfsu.csc413.chess.view.GameController;
+import edu.sfsu.csc413.chess.view.SwingView;
 
 public final class Main {
 
     public static void main(String[] args) {
         Game game = new Game();
 
-        BoardView view = args.length > 0
-                && args[0].equalsIgnoreCase("emoji")
-                ? new EmojiView()
-                : new ConsoleView();
+        BoardView view;
+
+        if (args.length > 0
+                && args[0].equalsIgnoreCase("swing")) {
+            view = new SwingView();
+        } else if (args.length > 0
+                && args[0].equalsIgnoreCase("emoji")) {
+            view = new EmojiView();
+        } else {
+            view = new ConsoleView();
+        }
 
         GameController controller = new GameController(game, view);
         controller.start();
@@ -23,3 +31,5 @@ public final class Main {
     private Main() {
     }
 }
+	
+
