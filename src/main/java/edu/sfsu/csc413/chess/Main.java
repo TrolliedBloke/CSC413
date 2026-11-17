@@ -6,6 +6,7 @@ import edu.sfsu.csc413.chess.view.ConsoleView;
 import edu.sfsu.csc413.chess.view.EmojiView;
 import edu.sfsu.csc413.chess.view.GameController;
 import edu.sfsu.csc413.chess.view.SwingView;
+import edu.sfsu.csc413.chess.view.TerminalView;
 
 public final class Main {
 
@@ -17,6 +18,9 @@ public final class Main {
         if (args.length > 0
                 && args[0].equalsIgnoreCase("swing")) {
             view = new SwingView();
+        } else if (args.length > 0
+                && args[0].equalsIgnoreCase("terminal")) {
+            view = new TerminalView();
         } else if (args.length > 0
                 && args[0].equalsIgnoreCase("emoji")) {
             view = new EmojiView();
